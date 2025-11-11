@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3001;
+const port = 8080;
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = 'mysecretkey';
