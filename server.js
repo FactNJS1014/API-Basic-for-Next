@@ -12,6 +12,9 @@ const fileUpload = require('express-fileupload');
 const path = require('path');
 const fs = require('fs');
 
+const MemberController = require('./controllers/MemberController');
+
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -56,6 +59,9 @@ app.get('/thai-date', (req, res) => {
     const thaiDate = Datelib.to_thai(date);
     res.send(thaiDate);
 });
+
+app.post('/member/signup', MemberController.signup);
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

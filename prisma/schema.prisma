@@ -14,8 +14,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Book{
-  id Int @id @default(autoincrement())
-  name String
+model Book {
+  id    Int    @id @default(autoincrement())
+  name  String
   price Float
+}
+
+model Todo {
+  id        Int    @id @default(autoincrement())
+  name      String
+  remark    String
+  status    String @default("use")
+  member_id Int
+  member    Member @relation(fields: [member_id], references: [id])
+}
+
+model Member {
+  id       Int    @id @default(autoincrement())
+  name     String
+  username String
+  password String
+  todos    Todo[]
 }
