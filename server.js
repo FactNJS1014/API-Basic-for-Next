@@ -61,6 +61,7 @@ app.get('/thai-date', (req, res) => {
 });
 
 app.post('/member/signup', MemberController.signup);
+app.post('/member/signin', MemberController.signin);
 
 
 app.get('/', (req, res) => {
