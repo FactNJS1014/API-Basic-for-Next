@@ -57,7 +57,66 @@ const MemberController = {
         }catch (err){
             res.status(500).json({ error: err.message });
         }
-    }
+    },
+    info: async (req,res) => {
+        try {
+           const token = await req.headers['authorization'].replace('Bearer ', '');
+           const secret_key = process.env.SECRET_KEY
+           const payload = await jwt.verify(token, secret_key);
+           const member_id = payload.id;
+           const findUser = await prisma.member.findFirst({
+               where: {
+                   id: member_id,
+               },
+               select:{
+                name: true,
+                username: true,
+               }
+           });
+           if (!findUser) {
+               return res.status(401).json({ error: 'Invalid credentials' });
+           }
+           res.json({member: findUser})
+           
+        }catch (err){
+            res.status(500).json({ error: err.message });
+        }
+    },
+   update: async (req,res) => {
+        try {
+            
+            const {name, username, password} = req.body;
+            const token = req.headers['authorization'].replace('Bearer ', '');
+            const secret_key = process.env.SECRET_KEY
+            const payload = jwt.verify(token, secret_key);
+            const member_id = payload.id;
+            const oldUser = await prisma.member.findUnique({
+                where: {
+                    id: member_id,
+                },
+            });
+
+            let hashedPassword = oldUser.password;
+            if (password !== undefined && password !== "") {
+                hashedPassword = await bcrypt.hash(password, 10);
+            }
+
+            const updatedUser = await prisma.member.update({
+                where: {
+                    id: member_id,
+                },
+                data: {
+                    name: name,
+                    username: username,
+                    password: hashedPassword,
+                },
+            });
+            res.json({ member: updatedUser });
+            
+        }catch (err){
+            res.status(500).json({ error: err.message });
+        }
+    },
 
 
 
