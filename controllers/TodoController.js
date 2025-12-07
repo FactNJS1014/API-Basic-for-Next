@@ -28,6 +28,27 @@ const TodoController = {
             res.status(500).json({ error: error.message });
         }
     },
+    list: async (req, res) => {
+        try {
+            const token = req.headers['authorization'].replace('Bearer ', '');
+            const secret_key = process.env.SECRET_KEY
+            const payload = jwt.verify(token, secret_key);
+            const member_id = payload.id;
+            const todos = await prisma.todo.findMany({
+                where: {
+                    member_id: member_id,
+                },
+                orderBy: {
+                    id: 'desc',
+                },
+            });
+            console.log(todos);
+            res.json({ todos });
+            
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
     
 }
 

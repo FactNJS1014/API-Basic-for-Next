@@ -67,6 +67,7 @@ app.get('/member/info', MemberController.info);
 app.put('/member/update', MemberController.update);
 
 app.post('/todo/create', TodoController.create);
+app.get('/todo/list', TodoController.list);
 
 
 app.get('/', (req, res) => {
